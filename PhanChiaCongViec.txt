@@ -1,0 +1,18 @@
+Toàn: {
+    Hiển thị toàn bộ danh sách
+    Cập nhật dữ liệu từ file input
+    Show menu, xử lí yêu cầu do người dùng nhập từ bàn phím
+}
+Trí: {
+    Xoá liên lạc theo tên
+}
+Trọng: {
+    Sửa thông tin liên lạc theo số điện thoại
+    Tìm kiếm liên lạc theo tên
+}
+Trình: {
+    Thêm liên lạc mới
+}
+Toạ: {
+    Trích lọc các liên lạc theo mối quan hệ
+}

@@ -15,7 +15,7 @@ struct Contacts {
     Contacts(string n, string num, string rel): name(n), number(num), relation(rel){}
 };
 
-vector<pair<string,string>, string> storeContacts;
+vector<Contacts> storeContacts;
 
 //ham chuyen chuoi thanh chu thuong
 string toLowerCase(const string& str) {
@@ -34,6 +34,7 @@ void deleteContact(string& deleteName);
 void sortByRelation(string& relationShip);
 void Processing(int& choice);
 bool checkDuplicate(string& value, int step);
+void updateData();
 
 int main() {
 
@@ -80,14 +81,12 @@ void updateData() {
         stringstream ss(line);
         string name, number, relation;
         
-        getline(ss, name, ',');    // doc ten
-        getline(ss, number, ',');   // doc so dien thoai
-        getline(ss, relation, ',');   // doc moi quan he
-
-        // cap nhat du lieu vao vector
-        storeContacts.push_back(make_pair(make_pair(name,number),relation)); 
-
-        count++;
+        // Đảm bảo mỗi dòng có đủ 3 phần dữ liệu
+        if (getline(ss, name, ',') && getline(ss, number, ',') && getline(ss, relation, ',')) {
+            // Cập nhật dữ liệu vào vector
+            storeContacts.push_back(Contacts(name, number, relation)); 
+            count++;
+        }
     }
 
     file.close();  // dong file
@@ -108,21 +107,21 @@ void showUI() {
 
 void Processing(int& choice) {
 switch(choice) {
-        case 1:
+        case 1: {
             cout << "---DANH BA---" << endl;
             showAllContacts();
             break;
-        case 2: 
+        }
+        case 2: {
             cout << "---THEM LIEN HE MOI---" << endl;
             string name, num, rel;
-            cout << "Nhap ten: "
+            cout << "Nhap ten: ";
             getline(cin, name);cin.ignore();
             //kiem tra xem co trung ten khong
             while(checkDuplicate(name,1)) {
                 cout << "ERROR: Ten " << name << " da ton tai! \n Vui long nhap lai";
                 getline(cin, name);
             }
-            string newN = name;
             //lay so dien thoai
             cout << "Nhap so dien thoai: ";
             getline(cin, num);
@@ -131,26 +130,27 @@ switch(choice) {
                 cout << "ERROR: So dien thoai " << num << " da ton tai! \n Vui long nhap lai";
                 getline(cin, num);
             }
-            string newNum = num;
             //moi quan he
             cout << "Nhap moi quan he:";
             getline(cin, rel);
-            addNewContact(newN, newNum, rel);
+            addNewContact(name, num, rel);
             break;
-        case 3:
+        }
+        case 3: {
             cout << "---TIM LIEN HE THEO TEN---" << endl;
-            string name; getline(cin, name);
-            searchContact(name);
+            string Name; getline(cin, Name);
+            searchContact(Name);
             break;
-        case 4:
+        }
+        case 4: {
             cout << "---SUA THONG TIN LIEN HE---" << endl;
             //nhap so dien thoai muon sua
             cout << "Nhap so dien thoai: ";
-            string num; getline(cin,num); cin.ignore();
+            string Num; getline(cin,Num); cin.ignore();
             //check xem so dien thoai co ton tai khong
             bool appear = false;
-            for(int i = 0; i < n; i++) {
-                if(num == storeContacts[i].first.second) {
+            for(int i = 0; i < storeContacts.size(); i++) {
+                if(Num == storeContacts[i].number) {
                     appear = true;
                     break;
                 }
@@ -179,28 +179,39 @@ switch(choice) {
                 changeInformation(newN, newNum, newRel);
             }
             break;
-        case 5:
+        }
+        case 5: {
+            cout << "case 5";
             //code here
             break;
-        case 6:
+        }
+        case 6: {
             //code here
+            cout << "case 6";
             break;
-        default:
+        }
+        default: {
+            cout << "ERROR: Gia tri khong hop le!";
             break;
+        }
     }
 }
 
 bool checkDuplicate(string& value, int step){ //step 1: name | step 2: number
     switch(step) {
         case 1:
-            if(value == storeContacts[i].first.first) {
+            for(int i = 0; i < storeContacts.size(); i++) {
+            if(value == storeContacts[i].name) {
                     return false;
                 }
+            }
             break;
         case 2:
-            if(value == storeContacts[i].first.second) {
+        for(int i = 0; i < storeContacts.size(); i++) {
+            if(value == storeContacts[i].number) {
                     return false;
                 }
+        }
             break;
         default:
             break;
@@ -208,6 +219,26 @@ bool checkDuplicate(string& value, int step){ //step 1: name | step 2: number
     return true;
 }
 
-/*
-code 5 function
-*/
+void showAllContacts() {
+    //hiển thị danh bạ - Toàn
+}
+
+void addNewContact(string& newName, string& newNumber, string& newRelation) {
+    //thêm liên lạc mới - Trình
+}
+
+void searchContact(string& searchName) {
+    //tìm kiếm liên lạc theo tên - Trọng
+}
+
+void changeInformation(string& newName, string& newNumber, string& newRelation) {
+    //thay đổi thông tin theo số điện thoại - Trọng
+}
+
+void deleteContact(string& deleteName) {
+    //xoá liên lạc - Trí
+}
+
+void sortByRelation(string& relationShip) {
+    //lọc liên lạc theo mối quan hệ - Toạ
+}
