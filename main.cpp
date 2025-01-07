@@ -44,23 +44,23 @@ int main() {
 
     showUI();//hien thi menu
 
-    int cont =-1 ; 
+    char cont = 'y' ; 
     int choose; cin >> choose;
 
     while(choose < 1 || choose > 6) {
-        cout << "Lua chon khong hop le!\nBan co muon tiep tuc khong? (1 de tiep tuc/0 de dung):" << endl;
-        cin >> cont;
+        cout << "Lua chon khong hop le!\nBan co muon tiep tuc khong? (Y/N) : " << endl;
+        cin >> cont; 
         if(cont == 0) break;
         else {
             showUI();
             cin >> choose;
         }
     }
-    if(cont == 0) break;//xet xem nguoi dung co muon tiep tuc khong
+    if(tolower(cont) != 'y') break;//xet xem nguoi dung co muon tiep tuc khong
     Processing(choose);
-    cout << "Ban co muon tiep tuc khong? (1 de tiep tuc/0 de dung lai):";
+    cout << "Ban co muon tiep tuc khong? (Y/N) : ";
     cin >> cont;
-    if(cont == 0) break;//xet xem nguoi dung co muon tiep tuc khong
+    if(tolower(cont) != 'y') break;//xet xem nguoi dung co muon tiep tuc khong
     }
     return 0;
 }
@@ -106,14 +106,14 @@ void showUI() {
 }
 
 void Processing(int& choice) {
-switch(choice) {
+switch(choice) { //hien thi danh ba
         case 1: {
-            cout << "---DANH BA---" << endl;
+            cout << "------------DANH BA------------" << endl;
             showAllContacts();
             break;
         }
-        case 2: {
-            cout << "---THEM LIEN HE MOI---" << endl;
+        case 2: { //them lien he moi
+            cout << "------THEM LIEN HE MOI------" << endl;
             string name, num, rel;
             cout << "Nhap ten: ";
             getline(cin, name);cin.ignore();
@@ -136,13 +136,13 @@ switch(choice) {
             addNewContact(name, num, rel);
             break;
         }
-        case 3: {
-            cout << "---TIM LIEN HE THEO TEN---" << endl;
+        case 3: { //tim lien he theo ten
+            cout << "----TIM LIEN HE THEO TEN----" << endl;
             string Name; getline(cin, Name);
             searchContact(Name);
             break;
         }
-        case 4: {
+        case 4: { //sua thong tin lien he
             cout << "---SUA THONG TIN LIEN HE---" << endl;
             //nhap so dien thoai muon sua
             cout << "Nhap so dien thoai: ";
@@ -180,12 +180,12 @@ switch(choice) {
             }
             break;
         }
-        case 5: {
+        case 5: { //xoa lien he theo so dien thoai
             cout << "case 5";
             //code here
             break;
         }
-        case 6: {
+        case 6: { //trich loc lien he theo moi quan he
             //code here
             cout << "case 6";
             break;
@@ -220,7 +220,14 @@ bool checkDuplicate(string& value, int step){ //step 1: name | step 2: number
 }
 
 void showAllContacts() {
-    //hiển thị danh bạ - Toàn
+    //hiển thị danh bạ - Toàn 
+    cout << "-------------------------------" << endl;
+    for(int i = 0; i < storeContacts.size(); i++) {
+        cout << "Ten: " << storeContacts[i].name << endl 
+             << "So Dien Thoai: " << storeContacts[i].number << endl
+             << "Moi quan he: " << storeContacts[i].relation << endl
+             << "-------------------------------" << endl;
+    }
 }
 
 void addNewContact(string& newName, string& newNumber, string& newRelation) {
