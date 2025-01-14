@@ -30,7 +30,7 @@ void showUI();
 void showAllContacts();
 void addNewContact(string& newName, string& newNumber, int& newRelation);
 void searchContact(string& searchName);
-void changeInformation(string& newName, string& newNumber, int& newRelation);
+void changeInformation(const string& oldNum, string& newName, string& newNumber, int& newRelation);
 void deleteContact(string& deleteName);
 void sortByRelation(int& relationShip);
 void Processing(int& choice);
@@ -277,8 +277,10 @@ void searchContact(string& searchName) {
     //tìm kiếm liên lạc theo tên - Trọng
 }
 
-void changeInformation(string& newName, string& newNumber, int& newRelation) {
-    //thay đổi thông tin theo số điện thoại - Trọng
+void changeInformation(const string& oldNum, string& newName, string& newNumber, int& newRelation) {
+    //thay đổi thông tin theo số điện thoại - Toàn
+    stringstream ss
+
 }
 
 void deleteContact(string& deleteName) {
