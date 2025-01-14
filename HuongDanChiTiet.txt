@@ -1,0 +1,27 @@
+Trí: {
+    Xoá liên lạc theo tên:
+        
+
+}
+Trọng: {
+    Tìm kiếm liên lạc theo tên:
+        1. Nhập tên từ bàn phím (case 3)
+        2. Dùng hàm !checkDuplicate() xem có tên có tồn tại không
+        3. Nếu có thì tiến hành show tên ra bằng cách chạy vòng for tìm tên đó nằm ở đâu,
+        nếu toLowerCase(Name) == toLowerCase(storeContacts[i].Name) thì cho pos = i,
+        sau đó break khỏi vòng for và dùng cout để show các thông tin tại storeContact[pos] ra
+}
+Trình: {
+    Thêm liên lạc mới:
+        1. Nhận thông tin từ bàn phím(đã có ở case 2)
+        2. Check xem có trùng tên hay sđt không(dùng hàm !checkDuplicate() đọc kĩ ở code có hướng dẫn)
+        3. Nếu tên không trùng lặp thì cho chạy thêm hàm setRelation(newRel) để set lại mối quan hệ
+        4. Cuối cùng dùng hàm Update() để cập nhật thông tin vào file dữ liệu
+}
+Toạ: {
+    Trích lọc các liên lạc theo mối quan hệ:
+        1. Nhận thông tin từ bàn phím(case 6)
+        2. Cho count = -1
+        3. chạy for xét điều kiện (newRel == storeContacts[i].relation) thì in ra thông tin liên hệ tại điểm đó và count++
+        4. sau khi chạy hết vòng for mà count vẫn = -1 thì in ra "Khong co lien he nao."
+}

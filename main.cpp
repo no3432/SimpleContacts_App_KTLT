@@ -10,9 +10,9 @@ using namespace std;
 struct Contacts {
     string name;
     string number;
-    string relation;
+    int relation;
 
-    Contacts(string n, string num, string rel): name(n), number(num), relation(rel){}
+    Contacts(string n, string num, int rel): name(n), number(num), relation(rel){}
 };
 
 vector<Contacts> storeContacts;
@@ -25,16 +25,19 @@ string toLowerCase(const string& str) {
     }
     return result;
 }
+//khai bao cac ham su dung
 void showUI();
 void showAllContacts();
-void addNewContact(string& newName, string& newNumber, string& newRelation);
+void addNewContact(string& newName, string& newNumber, int& newRelation);
 void searchContact(string& searchName);
-void changeInformation(string& newName, string& newNumber, string& newRelation);
+void changeInformation(string& newName, string& newNumber, int& newRelation);
 void deleteContact(string& deleteName);
-void sortByRelation(string& relationShip);
+void sortByRelation(int& relationShip);
 void Processing(int& choice);
 bool checkDuplicate(string& value, int step);
 void updateData();
+void Update(string& newN, string& newNum, int& newRel);
+void setRelation(int& Relation);
 
 int main() {
 
@@ -113,26 +116,29 @@ switch(choice) { //hien thi danh ba
             break;
         }
         case 2: { //them lien he moi
+            int exit = -1;
             cout << "------THEM LIEN HE MOI------" << endl;
             string name, num, rel;
+            //tens
             cout << "Nhap ten: ";
             getline(cin, name);cin.ignore();
-            //kiem tra xem co trung ten khong
-            while(checkDuplicate(name,1)) {
-                cout << "ERROR: Ten " << name << " da ton tai! \n Vui long nhap lai";
-                getline(cin, name);
+            while(checkDuplicate(name,1)){
+                cout << "ERROR: Ten da ton tai, vui long nhap lai!" << endl;
+                cout << "Nhap ten: "; getline(cin,name);
+                cout << "Neu ban muon thoat chuong trinh vui long nhan phim \"1\": ";
+                cin >> exit; if(exit == 1) break;
             }
             //lay so dien thoai
             cout << "Nhap so dien thoai: ";
             getline(cin, num);
-            //kiem tra xem co trung so dien thoai khong
-            while(checkDuplicate(num,2)) {
-                cout << "ERROR: So dien thoai " << num << " da ton tai! \n Vui long nhap lai";
-                getline(cin, num);
+            while(checkDuplicate(num,2)){
+                cout << "ERROR: So dien thoai da ton tai, vui long nhap lai!" << endl;
+                cout << "Nhap so dien thoai: "; getline(cin,num);
+                cout << "Neu ban muon thoat chuong trinh vui long nhan phim \"1\": ";
+                cin >> exit; if(exit == 1) break;
             }
             //moi quan he
-            cout << "Nhap moi quan he:";
-            getline(cin, rel);
+            setRelation(rel);
             addNewContact(name, num, rel);
             break;
         }
@@ -148,14 +154,7 @@ switch(choice) { //hien thi danh ba
             cout << "Nhap so dien thoai: ";
             string Num; getline(cin,Num); cin.ignore();
             //check xem so dien thoai co ton tai khong
-            bool appear = false;
-            for(int i = 0; i < storeContacts.size(); i++) {
-                if(Num == storeContacts[i].number) {
-                    appear = true;
-                    break;
-                }
-            }
-            if(!appear) {
+            if(checkDuplicate(Num,2)) {
                 cout << "ERROR: So dien thoai khong ton tai!" << endl;
                 break;
             }
@@ -164,30 +163,43 @@ switch(choice) { //hien thi danh ba
                 cout << "Nhap ten muon thay doi: ";
                 string newN; getline(cin, newN);
                 while(checkDuplicate(newN,1)) {
-                cout << "ERROR: Ten " << newN << " da ton tai! \n Vui long nhap lai";
-                getline(cin, newN);
+                    cout << "ERROR: Ten " << newN << " da ton tai! \n Vui long nhap lai";
+                    getline(cin, newN);
                 }
                 //nhap so dien thoai
                 cout << "Nhap so dien thoai muon thay doi: ";
                 string newNum; getline(cin, newNum);
                 while(checkDuplicate(newNum,2)) {
-                cout << "ERROR: Ten " << newNum << " da ton tai! \n Vui long nhap lai";
-                getline(cin, newNum);
+                    cout << "ERROR: Ten " << newNum << " da ton tai! \n Vui long nhap lai";
+                    getline(cin, newNum);
                 }
                 //nhap moi quan he
-                string newRel; getline(cin, newRel);
+                string newRel; setRelation(newRel);
                 changeInformation(newN, newNum, newRel);
             }
             break;
         }
         case 5: { //xoa lien he theo so dien thoai
-            cout << "case 5";
-            //code here
+            string delNum;
+            cout << "Nhap so dien thoai muon xoa: "; getline(cin, delNum);
+            if(checkDuplicate(delNum)) {
+                cout << "ERROR: So dien thoai khong ton tai!";
+                break;
+            }
+            else deleteContact(delNum);
             break;
         }
         case 6: { //trich loc lien he theo moi quan he
-            //code here
-            cout << "case 6";
+            cout << "---TRICH LOC LIEN LAC THEO MOI QUAN HE---" << endl
+                 << "1. Cha/Me\n2. Anh/Chi/Em\n3. Nguoi yeu/Vo\n4. Ban be\n5. Khac"
+                 << endl
+                 << "Vui long chon moi quan he: ";
+            int filterRel; cin >> filterRel; cin.ignore();
+            while(filterRel < 1 || filterRel > 5) {
+                cout << "ERROR: Gia tri khong hop le, vui long nhap lai!" << endl;
+                cout << "Chon moi quan he: "; cin >> filterRel;
+            }
+            sortByRelation(filterRel);
             break;
         }
         default: {
@@ -201,14 +213,14 @@ bool checkDuplicate(string& value, int step){ //step 1: name | step 2: number
     switch(step) {
         case 1:
             for(int i = 0; i < storeContacts.size(); i++) {
-            if(value == storeContacts[i].name) {
+            if(toLowerCase(value) == toLowerCase(storeContacts[i].name)) {
                     return false;
                 }
             }
             break;
         case 2:
         for(int i = 0; i < storeContacts.size(); i++) {
-            if(value == storeContacts[i].number) {
+            if(toLowerCase(value) == toLowerCase(storeContacts[i].number)) {
                     return false;
                 }
         }
@@ -219,18 +231,45 @@ bool checkDuplicate(string& value, int step){ //step 1: name | step 2: number
     return true;
 }
 
+void Update(string newN, string newNum, int newRel) {
+    ostream file("Data.txt", ios::app); //ios::app de set con tro o dong cuoi cung
+    if(!file) {
+        cout << "ERROR: Khong the mo file!" << endl;
+        return;
+    }
+    //nhap du lieu vao file
+    file << "\"" << newN << "\", \"" << newNum << "\", " << newRel << "\n";
+    file.close();
+    cout << "Da nhap lien lac " << newN << " vao danh sach.";
+}
+
+void setRelation(int& Relation) {
+    cout << "Chon moi quan he voi lien lac nay: " << endl
+         << "1. Cha/Me\n2. Anh/Chi/Em\n3. Nguoi yeu/Vo\n4. Ban be\n5. Khac" << endl
+         << "Vui long chon (1-5): ";
+    cin >> Relation;
+    while(Relation < 1 || Relation > 5) {
+        cout << "ERROR: Lua chon khong hop le!" << endl;
+        cout << "Chon moi quan he voi lien lac nay: " << endl
+         << "1. Cha/Me\n2. Anh/Chi/Em\n3. Nguoi yeu/Vo\n4. Ban be\n5. Khac" << endl
+         << "Vui long chon (1-5): ";
+        cin >> Relation;
+    }
+}
+
 void showAllContacts() {
     //hiển thị danh bạ - Toàn 
+    string Relation[7] = {"0","Cha/Me","Anh/Chi/Em","Nguoi yeu/Vo","Ban be","Khac"};
     cout << "-------------------------------" << endl;
     for(int i = 0; i < storeContacts.size(); i++) {
         cout << "Ten: " << storeContacts[i].name << endl 
              << "So Dien Thoai: " << storeContacts[i].number << endl
-             << "Moi quan he: " << storeContacts[i].relation << endl
+             << "Moi quan he: " << Relation[i] << endl
              << "-------------------------------" << endl;
     }
 }
 
-void addNewContact(string& newName, string& newNumber, string& newRelation) {
+void addNewContact(string& newName, string& newNumber, int& newRelation) {
     //thêm liên lạc mới - Trình
 }
 
@@ -238,7 +277,7 @@ void searchContact(string& searchName) {
     //tìm kiếm liên lạc theo tên - Trọng
 }
 
-void changeInformation(string& newName, string& newNumber, string& newRelation) {
+void changeInformation(string& newName, string& newNumber, int& newRelation) {
     //thay đổi thông tin theo số điện thoại - Trọng
 }
 
@@ -246,6 +285,6 @@ void deleteContact(string& deleteName) {
     //xoá liên lạc - Trí
 }
 
-void sortByRelation(string& relationShip) {
+void sortByRelation(int& relationShip) {
     //lọc liên lạc theo mối quan hệ - Toạ
 }
