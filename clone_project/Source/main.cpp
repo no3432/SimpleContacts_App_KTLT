@@ -5,36 +5,13 @@
 #include <map>
 #include <fstream>
 #include<sstream>
+#include "main.h"
 
 #define NAME 20
 
 using namespace std;
-// Khai bao struct chua contacts
-struct Contacts {
-    std::string name;
-    std::string number;
-    int relation;
 
-    Contacts(std::string n, std::string num, int rel) : name(n), number(num), relation(rel) {}
-};
-
-// Khai bao vector luu tru tam thoi
 vector<Contacts> storeContacts;
-
-// Khai bao ham
-string toLowerCase(const string& str);
-void showUI();
-void showAllContacts();
-void addNewContact(string& newName, string& newNumber, int& newRelation);
-void searchContact(string& searchName);
-void changeInformation(const string& oldNum, string& newName, string& newNumber, int& newRelation);
-void deleteContact(string& deleteName);
-void sortByRelation(int& relationShip);
-void Processing(int& choice);
-bool checkDuplicate(string& value, int step);
-void updateData();
-void setRelation(int& Relation);
-void Update();
 
 //ham chuyen chuoi thanh chu thuong
 string toLowerCase(const string& str) {
@@ -78,7 +55,7 @@ void updateData() {
 
     storeContacts = {};
 
-    ifstream file("/Users/user/Documents/SimpleContacts_/final/Data.txt"); //mo file dau vao
+    ifstream file("/Users/user/Documents/SimpleContacts_/Contacts_project/clone_project/Source/Data.txt"); //mo file dau vao
     
     if (!file) {
     cerr << "ERROR: Khong the mo file!" << endl;
@@ -172,18 +149,7 @@ switch(choice) { //hien thi danh ba
                 cout << "Nhap ten muon thay doi: ";
                 string newNAME;
                 getline(cin, newNAME);
-                //luu ten cu vao bien tam de phong truong hop client chi muon doi sdt
-                string oldName = "";
-                Num.erase(remove(Num.begin(), Num.end(), ' '), Num.end());
-                for(int i = 0; i < storeContacts.size(); i++) {
-                    string checkOldNum = storeContacts[i].number;
-                    checkOldNum.erase(remove(checkOldNum.begin(), checkOldNum.end(), ' '), checkOldNum.end());
-                    if(checkOldNum == Num) {
-                        oldName = storeContacts[i].name;
-                    }
-                }
                 while (!checkDuplicate(newNAME, 1)) {
-                    if(newNAME == oldName) break;
                     cout << "ERROR: Ten " << newNAME << " da ton tai! \n Vui long nhap lai" << endl;
                     getline(cin, newNAME);
                 }
@@ -281,7 +247,7 @@ void setRelation(int& Relation) {
 void Update() {
     storeContacts = {};
 
-    ifstream file("/Users/user/Documents/SimpleContacts_/final/Data.txt"); //mo file dau vao
+    ifstream file("/Users/user/Documents/SimpleContacts_/Contacts_project/clone_project/Source/Data.txt"); //mo file dau vao
     
     if (!file) {
     cerr << "ERROR: Khong the mo file!" << endl;
@@ -307,94 +273,4 @@ void Update() {
 
     file.close();  // dong file
 
-}
-
-//hien thi tat ca cac lien he - Toan
-void showAllContacts() {
-    if (storeContacts.empty()) {
-        cout << "Danh ba trong!" << endl;
-    } else {
-        string Relation[6] = {"Gia Dinh","Ban be","Thay/ Co","Dong nghiep","Khac"};
-        cout << "-------------------------------" << endl;
-    for(int i = 0; i < storeContacts.size(); i++) {
-        cout << "Ten: " << storeContacts[i].name << endl 
-             << "So Dien Thoai: " << storeContacts[i].number << endl
-             << "Moi quan he: " << Relation[storeContacts[i].relation-1] << endl
-             << "-------------------------------" << endl;
-    }
-}
-}
-//them lien he moi - Trình
-void addNewContact(string& newName, string& newNumber, int& newRelation) {
-    
-}
-
-
-//tim kiem lien he theo ten
-void searchContact(string& searchName) {
-    //tìm kiếm liên lạc theo tên - Trọng
-}
-
-//sua thong tin lien he
-
-void changeInformation(const string& oldNum, string& newName, string& newNumber, int& newRelation) {
-    //thay đổi thông tin theo số điện thoại - Toàn
-    ifstream file("/Users/user/Documents/SimpleContacts_/final/Data.txt");
-    if (!file.is_open()) {
-        cerr << "ERROR: Khong the mo file!" << endl;
-        return;
-    }
-
-    vector<string> updatedLines;
-    string line;
-
-    while (getline(file, line)) {
-        stringstream ss(line);
-        string name, number; 
-        int relation;
-
-        getline(ss, name, ',');
-        getline(ss, number, ',');
-        ss >> relation;
-
-        // Xoa khoang trang
-        number.erase(remove(number.begin(), number.end(), ' '), number.end());
-        //neu tim thay so dien thoai thi doi thong tin
-        if (number == oldNum) {
-            updatedLines.push_back(newName + "," + newNumber + "," + to_string(newRelation));
-        } else {
-            updatedLines.push_back(line);
-        }
-    }
-
-    file.close();
-
-
-    // Ghi lai du lieu
-
-    ofstream outfile("/Users/user/Documents/SimpleContacts_/final/Data.txt", ios::trunc);
-    if (!outfile.is_open()) {
-        cerr << "ERROR: Loi Khong the mo file" << endl;
-        return;
-    }
-
-    for (const auto& updatedLine : updatedLines) {
-        outfile << updatedLine << endl;
-    }
-
-    outfile.close();
-    cout << "Da cap nhat thanh cong" << endl;
-
-    Update();
-}
-
-//xoa lien he
-
-void deleteContact(string& deleteName) {
-    //xoá liên lạc - Trí
-}
-
-//trich loc lien he theo moi quan he
-void sortByRelation(int& relationShip) {
-    //lọc liên lạc theo mối quan hệ - Toạ
 }
