@@ -7,7 +7,6 @@ Trí: {
     Xoá liên lạc theo tên
 }
 Trọng: {
-    Sửa thông tin liên lạc theo số điện thoại
     Tìm kiếm liên lạc theo tên
 }
 Trình: {
