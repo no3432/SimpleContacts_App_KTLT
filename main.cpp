@@ -326,7 +326,21 @@ void showAllContacts() {
 }
 //them lien he moi - Trình
 void addNewContact(string& newName, string& newNumber, int& newRelation) {
+    // Thêm liên lạc mới vào vector
+    storeContacts.push_back(Contacts(newName, newNumber, newRelation));
     
+    // Cập nhật vào file Data.txt
+    ofstream file("Data.txt", ios::app); 
+    if (!file) {
+        cerr << "ERROR: Khong the mo file!" << endl;
+        return;
+    }
+
+    // Ghi thông tin liên lạc mới vào file
+    file << "\n" << newName << "," << newNumber << ", " << newRelation;
+    file.close(); // Đóng file sau khi ghi
+
+    cout << "Da them lien he moi: " << newName << endl;
 }
 
 
@@ -339,7 +353,7 @@ void searchContact(string& searchName) {
 
 void changeInformation(const string& oldNum, string& newName, string& newNumber, int& newRelation) {
     //thay đổi thông tin theo số điện thoại - Toàn
-    ifstream file("/Users/user/Documents/SimpleContacts_/final/Data.txt");
+    ifstream file("Data.txt");
     if (!file.is_open()) {
         cerr << "ERROR: Khong the mo file!" << endl;
         return;
@@ -372,7 +386,7 @@ void changeInformation(const string& oldNum, string& newName, string& newNumber,
 
     // Ghi lai du lieu
 
-    ofstream outfile("/Users/user/Documents/SimpleContacts_/final/Data.txt", ios::trunc);
+    ofstream outfile("Data.txt", ios::trunc);
     if (!outfile.is_open()) {
         cerr << "ERROR: Loi Khong the mo file" << endl;
         return;
@@ -392,6 +406,50 @@ void changeInformation(const string& oldNum, string& newName, string& newNumber,
 
 void deleteContact(string& deleteName) {
     //xoá liên lạc - Trí
+    ifstream file("Data.txt");
+    if (!file.is_open()) {
+        cerr << "ERROR: Khong the mo file!" << endl;
+        return;
+    }
+
+    vector<string> updatedLines;
+    string line;
+
+    while (getline(file, line)) {
+        stringstream ss(line);
+        string name, number; 
+        int relation;
+
+        getline(ss, name, ',');
+        getline(ss, number, ',');
+        ss >> relation;
+
+        // Xoa khoang trang
+        name.erase(remove(name.begin(), name.end(), ' '), name.end());
+        deleteName.erase(remove(deleteName.begin(), deleteName.end(), ' '), deleteName.end());
+        //neu khong tim thay ten de xoa thi giu nguyen
+        if (toLowerCase(deleteName) != toLowerCase(name)) {
+            updatedLines.push_back(line);
+        }
+    }
+
+    file.close();
+
+    // Ghi lai du lieu
+    ofstream outfile("Data.txt");
+    if (!outfile.is_open()) {
+        cerr << "ERROR: Loi Khong the mo file" << endl;
+        return;
+    }
+
+    for (const auto& updatedLine : updatedLines) {
+        outfile << updatedLine << endl;
+    }
+
+    outfile.close();
+    cout << "Da xoa thanh cong" << endl;
+
+    Update();
 }
 
 //trich loc lien he theo moi quan he
