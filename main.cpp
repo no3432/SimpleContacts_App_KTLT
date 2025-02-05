@@ -78,7 +78,7 @@ void updateData() {
 
     storeContacts = {};
 
-    ifstream file("/Users/user/Documents/SimpleContacts_/final/Data.txt"); //mo file dau vao
+    ifstream file("Data.txt"); //mo file dau vao
     
     if (!file) {
     cerr << "ERROR: Khong the mo file!" << endl;
@@ -281,7 +281,7 @@ void setRelation(int& Relation) {
 void Update() {
     storeContacts = {};
 
-    ifstream file("/Users/user/Documents/SimpleContacts_/final/Data.txt"); //mo file dau vao
+    ifstream file("Data.txt"); //mo file dau vao
     
     if (!file) {
     cerr << "ERROR: Khong the mo file!" << endl;
