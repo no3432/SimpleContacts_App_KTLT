@@ -346,8 +346,26 @@ void addNewContact(string& newName, string& newNumber, int& newRelation) {
 
 //tim kiem lien he theo ten
 void searchContact(string& searchName) {
-    //tìm kiếm liên lạc theo tên - Trọng
-}
+    void searchContact(string& searchName) {
+        string Relation[6] = {"Gia Dinh","Ban be","Thay/ Co","Dong nghiep","Khac"}; 
+        bool flag = false;
+        for (const auto& contact : storeContacts) {
+            string checkName = contact.name;
+            checkName.erase(remove(checkName.begin(), checkName.end(), ' '), checkName.end());
+            searchName.erase(remove(searchName.begin(), searchName.end(), ' '), searchName.end());
+            if (toLowerCase(checkName) == toLowerCase(searchName)) {
+                cout << "Ten: " << contact.name << endl 
+                     << "So Dien Thoai: " << contact.number << endl
+                     << "Moi quan he: " << Relation[contact.relation-1] << endl;
+                flag = true;
+                break;
+            }
+        }
+        if (!flag) {
+            cout << "Khong tim thay lien he!" << endl;
+        }
+    }
+
 
 //sua thong tin lien he
 
